@@ -48,7 +48,6 @@ button {
 .button-container { position: relative; width: 90%; max-width: 320px; height: 200px; margin: auto; }
 .heart {
     position: absolute;
-    animation: floatUp 5s linear infinite;
     pointer-events: none;
     z-index: 1;
     font-size: 20px;
@@ -62,18 +61,21 @@ button {
 <body>
 
 <script>
-/* floating hearts */
+/* 🩷 Floating hearts - faster and denser */
 setInterval(() => {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "💖";
-    heart.style.left = Math.random()*100+"vw";
-    heart.style.fontSize = (20+Math.random()*20)+"px";
-    document.body.appendChild(heart);
-    setTimeout(()=>heart.remove(),5000);
-},300);
+    for(let i=0;i<2;i++){ // spawn 2 hearts per interval
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "💖";
+        heart.style.left = Math.random()*100+"vw";
+        heart.style.fontSize = (20+Math.random()*25)+"px";
+        heart.style.animation = `floatUp ${3+Math.random()*2}s linear forwards`;
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(), 4000);
+    }
+}, 150);
 
-/* vibration for mobile */
+/* Mobile vibration */
 function vibrate(){ if(navigator.vibrate){ navigator.vibrate(35); } }
 document.addEventListener("touchstart", vibrate);
 document.querySelectorAll("button").forEach(btn=>{
@@ -84,7 +86,6 @@ document.querySelectorAll("button").forEach(btn=>{
 function nextScreen(id){
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-
     if(id==="screenGame") startGame();
     if(id==="screenLoading") startLoading();
 }
@@ -108,9 +109,9 @@ function startGame(){
         document.body.appendChild(heart);
 
         let fall=setInterval(()=>{
-            heart.style.top=(heart.offsetTop+2.5)+"px";
+            heart.style.top=(heart.offsetTop+3)+"px";
             if(heart.offsetTop>window.innerHeight){ heart.remove(); clearInterval(fall); }
-        },20);
+        },15);
 
         const catchHeart = () => {
             vibrate();
@@ -121,20 +122,20 @@ function startGame(){
         };
         heart.addEventListener("click", catchHeart);
         heart.addEventListener("touchstart", catchHeart);
-    },900);
+    },700); // faster spawn
 }
 
-/* WHATSAPP QUESTIONNAIRE */
+/* QUESTIONNAIRE + WHATSAPP */
 let userAnswers = [];
 function sendResponses(){
     const q1 = document.getElementById("q1").value.trim();
     const q2 = document.getElementById("q2").value.trim();
     const q3 = document.getElementById("q3").value.trim();
-    if(!q1 || !q2 || !q3){ alert("🌸 Please answer all questions to share your love 💌"); return; }
+    if(!q1 || !q2 || !q3){ alert("🌸 Please answer all questions 💌"); return; }
 
     userAnswers = [q1, q2, q3];
 
-    alert("✨ Cute! Now send your answers on WhatsApp 💖 and then come back to see my sweet response 😘");
+    alert("✨ Cute! Press OK to open WhatsApp 💖 send your answers, then come back to see my response 😘");
 
     const phone = "7379040604";
     const msg = `Hi! Here are my answers:\n1️⃣ How we first met: ${q1}\n2️⃣ What I like in you: ${q2}\n3️⃣ Why I married you: ${q3}`;
@@ -144,9 +145,7 @@ function sendResponses(){
     setTimeout(()=>nextScreen("screenMyAnswers"), 500);
 }
 
-/* LOADING & QUIZ */
-function wrongAnswer(){ document.getElementById("quizMsg").innerText="Hmm… try again 😏"; }
-function correctAnswer(){ document.getElementById("quizMsg").innerText="I knew it 💖"; setTimeout(()=>nextScreen("screenLoading"),1000); }
+/* LOADING & PROPOSAL */
 function startLoading(){
     const texts=["Checking heart status... 💓","Scanning emotions... 🧠","Detecting love levels... 📈","Result: HIGH ❤️‍🔥"];
     let i=0;
@@ -157,6 +156,30 @@ function startLoading(){
     },1000);
 }
 function sayYes(){ vibrate(); nextScreen("screenFinal"); }
+
+/* NO BUTTON FUN */
+const noBtn=document.getElementById("noBtn");
+const container=document.getElementById("btnContainer");
+const funText=document.getElementById("funText");
+let msgs=[
+"Are you sure? 🥺",
+"Think again 😢",
+"I'll be sad 💔",
+"Last chance 😭",
+"Okay this button is broken 😤"
+];
+let count=0;
+if(noBtn){
+    noBtn.style.left="50%";
+    noBtn.style.top="100px";
+    noBtn.addEventListener("mouseover",()=>{
+        const maxX=container.clientWidth-noBtn.offsetWidth;
+        const maxY=container.clientHeight-noBtn.offsetHeight;
+        noBtn.style.left=Math.random()*maxX+"px";
+        noBtn.style.top=Math.random()*maxY+"px";
+        if(count<msgs.length){ funText.innerText=msgs[count]; count++; }
+    });
+}
 </script>
 
 <!-- SCREENS -->
@@ -184,7 +207,6 @@ function sayYes(){ vibrate(); nextScreen("screenFinal"); }
     <h2 id="score">0 / 10 💖</h2>
 </div>
 
-<!-- QUESTIONNAIRE SCREEN -->
 <div class="screen" id="screenQuestionnaire">
     <h1>Tell me about us 😏</h1>
     <p>Answer these questions 💌</p>
@@ -194,12 +216,11 @@ function sayYes(){ vibrate(); nextScreen("screenFinal"); }
     <button class="btn" onclick="sendResponses()">Send responses to 💖</button>
 </div>
 
-<!-- MY ANSWERS SCREEN -->
 <div class="screen" id="screenMyAnswers">
     <h1>Here’s what I feel 💌</h1>
     <p id="myAnswers">
         <strong>How we first met:</strong> On Jeevansathi 🌸<br>
-        <strong>What I like in you:</strong> Your Honest and Kindness 💖<br>
+        <strong>What I like in you:</strong> Your honesty and kindness 💖<br>
         <strong>Why I married you:</strong> Because I love you! 🥰<br>
     </p>
     <button class="btn" onclick="nextScreen('screenProposal')">Next 💖</button>
