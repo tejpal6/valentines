@@ -1,3 +1,310 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <title>For Someone Special 💖</title> <style> body { margin: 0; font-family: 'Segoe UI', sans-serif; background: linear-gradient(to right, #ff758c, #ff7eb3); color: white; text-align: center; overflow: hidden; } .screen { display: none; height: 100vh; justify-content: center; align-items: center; flex-direction: column; animation: fade 0.8s ease; } .active { display: flex; } @keyframes fade { from {opacity: 0; transform: scale(0.95);} to {opacity: 1; transform: scale(1);} } h1 { font-size: 2.8em; } p { font-size: 1.2em; max-width: 500px; } button { padding: 12px 22px; font-size: 18px; border: none; border-radius: 12px; cursor: pointer; margin: 10px; } .btn { background: white; color: #ff4d6d; } .yes { background: #28a745; color: white; } .no { background: #dc3545; color: white; position: absolute; } .button-container { position: relative; width: 300px; height: 250px; } /* background hearts FIXED */ .heart { position: absolute; animation: floatUp 5s linear infinite; pointer-events: none; /* KEY FIX */ z-index: 1; } @keyframes floatUp { from {transform: translateY(100vh); opacity: 1;} to {transform: translateY(-10vh); opacity: 0;} } </style> </head> <body> <script> /* floating hearts */ setInterval(() => { const heart = document.createElement("div"); heart.className = "heart"; heart.innerHTML = "💖"; heart.style.left = Math.random()*100+"vw"; heart.style.fontSize = (15+Math.random()*20)+"px"; document.body.appendChild(heart); setTimeout(()=>heart.remove(),5000); },300); </script> <!-- SCREEN 1 --> <div class="screen active" id="screen1"> <h1>Hey You 💫</h1> <p>I’ve been meaning to tell you something… 🥺</p> <button class="btn" onclick="nextScreen('screen2')">Tell me 👉</button> </div> <!-- SCREEN 2 --> <div class="screen" id="screen2"> <h1>You’re kinda special 💖</h1> <p>You randomly cross my mind… and suddenly I’m smiling 🌸</p> <button class="btn" onclick="nextScreen('screen3')">Continue 😳</button> </div> <!-- SCREEN 3 --> <div class="screen" id="screen3"> <h1>Not gonna lie 😌</h1> <p>Life feels better with you in it ✨</p> <button class="btn" onclick="nextScreen('screenGame')">Okay… 👀</button> </div> <!-- GAME --> <div class="screen" id="screenGame"> <h1>Mini Game 💖</h1> <p>Catch 10 hearts to continue 😌</p> <h2 id="score">0 / 10</h2> </div> <!-- QUIZ --> <div class="screen" id="screenQuiz"> <h1>Quick Question 😏</h1> <p>Who makes my day better?</p> <button class="btn" onclick="wrongAnswer()">My phone 📱
-</button> <button class="btn" onclick="wrongAnswer()">Food 🍕</button> <button class="btn" onclick="correctAnswer()">You 💖</button> <p id="quizMsg"></p> </div> <!-- LOADING --> <div class="screen" id="screenLoading"> <h1>Analyzing feelings… 🧠💓</h1> <p id="loadingText">Checking heart status...</p> </div> <!-- PROPOSAL --> <div class="screen" id="screenProposal"> <h1>So… 💌</h1> <p>Will you be my Valentine? 🥺👉👈</p> ``` <div class="button-container" id="btnContainer"> <button class="yes" onclick="sayYes()">YES 💕</button> <button class="no" id="noBtn">No 😢</button> </div> <p id="funText"></p> ``` </div> <!-- FINAL --> <div class="screen" id="screenFinal"> <h1>YAYYYYY!!! 🎉💖😍</h1> <p>You just made my heart do a happy dance 💃💞</p> <p>I promise to make you smile every single day 🌹</p> <h2>Now you're stuck with me 😌❤️</h2> </div> <script> function nextScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); if(id==="screenGame") startGame(); if(id==="screenLoading") startLoading(); } /* HEART GAME */ let score=0; function startGame(){ score=0; document.getElementById("score").innerText="0 / 10"; const interval=setInterval(()=>{ const heart=document.createElement("div"); heart.innerHTML="💖"; heart.style.position="absolute"; heart.style.left=Math.random()*90+"vw"; heart.style.top="-20px"; heart.style.fontSize="45px"; /* bigger */ heart.style.cursor="pointer"; heart.style.padding="10px"; heart.style.zIndex="1000"; /* above bg */ heart.style.pointerEvents="auto"; document.body.appendChild(heart); let fall=setInterval(()=>{ heart.style.top=(heart.offsetTop+2)+"px"; /* slower */ if(heart.offsetTop>window.innerHeight){ heart.remove(); clearInterval(fall); } },20); heart.addEventListener("click", ()=>{ heart.remove(); clearInterval(fall); score++; document.getElementById("score").innerText=score+" / 10"; if(score>=10){ clearInterval(interval); setTimeout(()=>nextScreen("screenQuiz"),800); } }); },1200); /* slower spawn */ } /* QUIZ */ function wrongAnswer(){ document.getElementById("quizMsg").innerText="Hmm… try again 😏"; } function correctAnswer(){ document.getElementById("quizMsg").innerText="I knew it 💖"; setTimeout(()=>nextScreen("screenLoading"),1000); } /* LOADING */ function startLoading(){ const texts=[ "Checking heart status... 💓", "Scanning emotions... 🧠", "Detecting love levels... 📈", "Result: HIGH ❤️<200d>🔥" ]; let i=0; const interval=setInterval(()=>{ document.getElementById("loadingText").innerText=texts[i]; i++; if(i>=texts.length){ clearInterval(interval); setTimeout(()=>nextScreen("screenProposal"),1000); } },1000); } /* YES */ function sayYes(){ nextScreen("screenFinal"); } /* NO BUTTON */ const noBtn=document.getElementById("noBtn"); const container=document.getElementById("btnContainer"); const funText=document.getElementById("funText"); let msgs=[ "Are you sure? 🥺", "Think again 😢", "I'll be sad 💔", "Last chance 😭", "Okay this button is broken 😤" ]; let count=0; noBtn.style.left="150px"; noBtn.style.top="100px"; noBtn.addEventListener("mouseover",()=>{ const maxX=container.clientWidth-noBtn.offsetWidth; const maxY=container.clientHeight-noBtn.offsetHeight; noBtn.style.left=Math.random()*maxX+"px"; noBtn.style.top=Math.random()*maxY+"px"; if(count<msgs.length){ funText.innerText=msgs[count]; count++; } }); /* SECRET */ document.addEventListener("keydown",(e)=>{ if(e.key==="h"){ alert("Secret unlocked 😌💖 You’re extra special"); } }); </script> </body> </html>
-~                                                                                 
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For Someone Special 💖</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right, #ff758c, #ff7eb3);
+    color: white;
+    text-align: center;
+    overflow: hidden;
+}
+
+.screen {
+    display: none;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    animation: fade 0.8s ease;
+}
+
+.active { display: flex; }
+
+@keyframes fade {
+    from {opacity: 0; transform: scale(0.95);}
+    to {opacity: 1; transform: scale(1);}
+}
+
+h1 { font-size: 2.8em; }
+p { font-size: 1.2em; max-width: 500px; }
+
+button {
+    padding: 12px 22px;
+    font-size: 18px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.btn { background: white; color: #ff4d6d; }
+.yes { background: #28a745; color: white; }
+.no { background: #dc3545; color: white; position: absolute; }
+
+.button-container {
+    position: relative;
+    width: 300px;
+    height: 250px;
+}
+
+/* background hearts */
+.heart {
+    position: absolute;
+    animation: floatUp 5s linear infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes floatUp {
+    from {transform: translateY(100vh); opacity: 1;}
+    to {transform: translateY(-10vh); opacity: 0;}
+}
+</style>
+
+</head>
+
+<body>
+
+<script>
+/* floating hearts */
+setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "💖";
+    heart.style.left = Math.random()*100+"vw";
+    heart.style.fontSize = (15+Math.random()*20)+"px";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),5000);
+},300);
+</script>
+
+<!-- SCREEN 1 -->
+
+<div class="screen active" id="screen1">
+    <h1>Hey You 💫</h1>
+    <p>I’ve been meaning to tell you something… 🥺</p>
+    <button class="btn" onclick="nextScreen('screen2')">Tell me 👉</button>
+</div>
+
+<!-- SCREEN 2 -->
+
+<div class="screen" id="screen2">
+    <h1>You’re kinda special 💖</h1>
+    <p>You randomly cross my mind… and suddenly I’m smiling 🌸</p>
+    <button class="btn" onclick="nextScreen('screen3')">Continue 😳</button>
+</div>
+
+<!-- SCREEN 3 -->
+
+<div class="screen" id="screen3">
+    <h1>Not gonna lie 😌</h1>
+    <p>Life feels better with you in it ✨</p>
+    <button class="btn" onclick="nextScreen('screenGame')">Okay… 👀</button>
+</div>
+
+<!-- GAME -->
+
+<div class="screen" id="screenGame">
+    <h1>Mini Game 💖</h1>
+    <p>Catch 10 hearts to continue 😌</p>
+    <h2 id="score">0 / 10</h2>
+</div>
+
+<!-- QUIZ -->
+
+<div class="screen" id="screenQuiz">
+    <h1>Quick Question 😏</h1>
+    <p>Who makes my day better?</p>
+    <button class="btn" onclick="wrongAnswer()">My phone 📱</button>
+    <button class="btn" onclick="wrongAnswer()">Food 🍕</button>
+    <button class="btn" onclick="correctAnswer()">You 💖</button>
+    <p id="quizMsg"></p>
+</div>
+
+<!-- LOADING -->
+
+<div class="screen" id="screenLoading">
+    <h1>Analyzing feelings… 🧠💓</h1>
+    <p id="loadingText">Checking heart status...</p>
+</div>
+
+<!-- PROPOSAL -->
+
+<div class="screen" id="screenProposal">
+    <h1>So… 💌</h1>
+    <p>Will you be my Valentine? 🥺👉👈</p>
+
+```
+<div class="button-container" id="btnContainer">
+    <button class="yes" onclick="sayYes()">YES 💕</button>
+    <button class="no" id="noBtn">No 😢</button>
+</div>
+
+<p id="funText"></p>
+```
+
+</div>
+
+<!-- FINAL -->
+
+<div class="screen" id="screenFinal">
+    <h1>YAYYYYY!!! 🎉💖😍</h1>
+    <p>You just made my heart do a happy dance 💃💞</p>
+    <p>I promise to make you smile every single day 🌹</p>
+    <h2>Now you're stuck with me 😌❤️</h2>
+</div>
+
+<script>
+/* 🔥 VIBRATION FUNCTION */
+function vibrate(){
+    if(navigator.vibrate){
+        navigator.vibrate(30);
+    }
+}
+
+/* vibrate on any tap */
+document.addEventListener("touchstart", vibrate);
+
+/* vibrate on all buttons */
+document.querySelectorAll("button").forEach(btn=>{
+    btn.addEventListener("click", vibrate);
+    btn.addEventListener("touchstart", vibrate);
+});
+
+function nextScreen(id){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+
+    if(id==="screenGame") startGame();
+    if(id==="screenLoading") startLoading();
+}
+
+/* HEART GAME */
+let score=0;
+
+function startGame(){
+    score=0;
+    document.getElementById("score").innerText="0 / 10";
+
+    const interval=setInterval(()=>{
+        const heart=document.createElement("div");
+        heart.innerHTML="💖";
+        heart.style.position="absolute";
+        heart.style.left=Math.random()*90+"vw";
+        heart.style.top="-20px";
+        heart.style.fontSize="45px";
+        heart.style.cursor="pointer";
+        heart.style.padding="10px";
+        heart.style.zIndex="1000";
+        heart.style.touchAction="manipulation";
+
+        document.body.appendChild(heart);
+
+        let fall=setInterval(()=>{
+            heart.style.top=(heart.offsetTop+2)+"px";
+            if(heart.offsetTop>window.innerHeight){
+                heart.remove();
+                clearInterval(fall);
+            }
+        },20);
+
+        const catchHeart = () => {
+            vibrate(); // 💥 vibration on catch
+
+            heart.remove();
+            clearInterval(fall);
+            score++;
+            document.getElementById("score").innerText=score+" / 10";
+
+            if(score>=10){
+                clearInterval(interval);
+                setTimeout(()=>nextScreen("screenQuiz"),800);
+            }
+        };
+
+        heart.addEventListener("click", catchHeart);
+        heart.addEventListener("touchstart", catchHeart);
+
+    },900);
+}
+
+/* QUIZ */
+function wrongAnswer(){
+    document.getElementById("quizMsg").innerText="Hmm… try again 😏";
+}
+function correctAnswer(){
+    document.getElementById("quizMsg").innerText="I knew it 💖";
+    setTimeout(()=>nextScreen("screenLoading"),1000);
+}
+
+/* LOADING */
+function startLoading(){
+    const texts=[
+        "Checking heart status... 💓",
+        "Scanning emotions... 🧠",
+        "Detecting love levels... 📈",
+        "Result: HIGH ❤️‍🔥"
+    ];
+    let i=0;
+    const interval=setInterval(()=>{
+        document.getElementById("loadingText").innerText=texts[i];
+        i++;
+        if(i>=texts.length){
+            clearInterval(interval);
+            setTimeout(()=>nextScreen("screenProposal"),1000);
+        }
+    },1000);
+}
+
+/* YES */
+function sayYes(){
+    vibrate();
+    nextScreen("screenFinal");
+}
+
+/* NO BUTTON */
+const noBtn=document.getElementById("noBtn");
+const container=document.getElementById("btnContainer");
+const funText=document.getElementById("funText");
+
+let msgs=[
+"Are you sure? 🥺",
+"Think again 😢",
+"I'll be sad 💔",
+"Last chance 😭",
+"Okay this button is broken 😤"
+];
+
+let count=0;
+
+noBtn.style.left="150px";
+noBtn.style.top="100px";
+
+noBtn.addEventListener("mouseover",()=>{
+    const maxX=container.clientWidth-noBtn.offsetWidth;
+    const maxY=container.clientHeight-noBtn.offsetHeight;
+    noBtn.style.left=Math.random()*maxX+"px";
+    noBtn.style.top=Math.random()*maxY+"px";
+
+    if(count<msgs.length){
+        funText.innerText=msgs[count];
+        count++;
+    }
+});
+
+/* SECRET */
+document.addEventListener("keydown",(e)=>{
+    if(e.key==="h"){
+        alert("Secret unlocked 😌💖 You’re extra special");
+    }
+});
+</script>
+
+</body>
+</html>
