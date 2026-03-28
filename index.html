@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Will You Be My Valentine?</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to right, #ff758c, #ff7eb3);
+        color: white;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .screen {
+        display: none;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .active {
+        display: flex;
+    }
+
+    h1 {
+        font-size: 3em;
+        margin-bottom: 10px;
+    }
+
+    p {
+        font-size: 1.2em;
+    }
+
+    button {
+        padding: 15px 25px;
+        font-size: 18px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        margin: 10px;
+        transition: 0.3s;
+    }
+
+    .btn {
+        background: white;
+        color: #ff4d6d;
+        font-weight: bold;
+    }
+
+    .yes {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .no {
+        background-color: #dc3545;
+        color: white;
+        position: absolute;
+    }
+
+    .button-container {
+        position: relative;
+        width: 300px;
+        height: 250px;
+        margin-top: 20px;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- Screen 1 -->
+<div class="screen active" id="screen1">
+    <h1>Hey ❤️</h1>
+    <p>I have something special to ask you...</p>
+    <button class="btn" onclick="nextScreen(2)">Next</button>
+</div>
+
+<!-- Screen 2 -->
+<div class="screen" id="screen2">
+    <h1>You make my world brighter 🌸</h1>
+    <p>Every moment with you feels magical ✨</p>
+    <button class="btn" onclick="nextScreen(3)">Next</button>
+</div>
+
+<!-- Screen 3 -->
+<div class="screen" id="screen3">
+    <h1>So... 💖</h1>
+    <p>Will you be my Valentine?</p>
+
+    <div class="button-container" id="btnContainer">
+        <button class="yes" onclick="sayYes()">Yes 💕</button>
+        <button class="no" id="noBtn">No 😢</button>
+    </div>
+</div>
+
+<!-- Final Screen -->
+<div class="screen" id="screen4">
+    <h1>YAYYY!!! ❤️😍</h1>
+    <p>You just made me the happiest person alive 💖</p>
+    <p>I promise to make you smile every single day 🌹</p>
+</div>
+
+<script>
+function nextScreen(num) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen' + num).classList.add('active');
+}
+
+function sayYes() {
+    nextScreen(4);
+}
+
+// No button movement logic
+const noBtn = document.getElementById("noBtn");
+const container = document.getElementById("btnContainer");
+
+// Set initial position
+noBtn.style.left = "150px";
+noBtn.style.top = "100px";
+
+noBtn.addEventListener("mouseover", () => {
+    const maxX = container.clientWidth - noBtn.offsetWidth;
+    const maxY = container.clientHeight - noBtn.offsetHeight;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+});
+</script>
+
+</body>
+</html>
